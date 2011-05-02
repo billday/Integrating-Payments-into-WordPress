@@ -87,6 +87,7 @@ function BillDay_PayPal_DisplayBalance() {
 	} else  {
 		exit('GetBalance failed: ' . print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
 	}
+	echo "<p id='dolly'>$billday_paypal_getbalance_httpParsedResponseAr</p>";
 }
 
 
