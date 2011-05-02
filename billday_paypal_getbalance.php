@@ -9,6 +9,12 @@ Author URI: http://billday.com
 License:  All source code is licensed under the Simplified BSD License http://www.opensource.org/licenses/bsd-license.php
 */
 
+/**
+ * Use this global variable to indicate whether the GetBalance API call should
+ * be made against the sandbox or other environment; don't set to 'live' until
+ * you have thoroughly tested it and are willing to lose real money at your
+ * own expense if you're wrong!
+ */
 $billday_paypal_getbalance_environment = 'sandbox';	// or 'beta-sandbox' or 'live'
 
 /**
