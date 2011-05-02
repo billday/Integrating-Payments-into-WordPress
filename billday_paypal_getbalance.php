@@ -9,7 +9,7 @@ Author URI: http://billday.com
 License:  All source code is licensed under the Simplified BSD License http://www.opensource.org/licenses/bsd-license.php
 */
 
-$environment = 'sandbox';	// or 'beta-sandbox' or 'live'
+$billday_paypal_getbalance_environment = 'sandbox';	// or 'beta-sandbox' or 'live'
 
 /**
  * Send HTTP POST Request
@@ -18,69 +18,69 @@ $environment = 'sandbox';	// or 'beta-sandbox' or 'live'
  * @param	string	The POST Message fields in &name=value pair format
  * @return	array	Parsed HTTP Response body
  */
-function PPHttpPost($methodName_, $nvpStr_) {
-	global $environment;
+function PPHttpPost($billday_paypal_getbalance_methodName_, $billday_paypal_getbalance_nvpStr_) {
+	global $billday_paypal_getbalance_environment;
 
-	$API_UserName = urlencode('my_api_username');
-	$API_Password = urlencode('my_api_password');
-	$API_Signature = urlencode('my_api_signature');
-	$API_Endpoint = "https://api-3t.paypal.com/nvp";
-	if("sandbox" === $environment || "beta-sandbox" === $environment) {
-		$API_Endpoint = "https://api-3t.$environment.paypal.com/nvp";
+	$billday_paypal_getbalance_API_UserName = urlencode('my_api_username');
+	$billday_paypal_getbalance_API_Password = urlencode('my_api_password');
+	$billday_paypal_getbalance_API_Signature = urlencode('my_api_signature');
+	$billday_paypal_getbalance_API_Endpoint = "https://api-3t.paypal.com/nvp";
+	if("sandbox" === $billday_paypal_getbalance_environment || "beta-sandbox" === $billday_paypal_getbalance_environment) {
+		$billday_paypal_getbalance_API_Endpoint = "https://api-3t.$billday_paypal_getbalance_environment.paypal.com/nvp";
 	}
-	$version = urlencode('51.0');
+	$billday_paypal_getbalance_version = urlencode('51.0');
 
 	// setting the curl parameters.
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $API_Endpoint);
-	curl_setopt($ch, CURLOPT_VERBOSE, 1);
+	$billday_paypal_getbalance_ch = curl_init();
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_URL, $billday_paypal_getbalance_API_Endpoint);
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_VERBOSE, 1);
 
 	// turning off the server and peer verification(TrustManager Concept).
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_POST, 1);
 
 	// NVPRequest for submitting to server
-	$nvpreq = "METHOD=$methodName_&VERSION=$version&PWD=$API_Password&USER=$API_UserName&SIGNATURE=$API_Signature$nvpStr_";
+	$billday_paypal_getbalance_nvpreq = "METHOD=$billday_paypal_getbalance_methodName_&VERSION=$billday_paypal_getbalance_version&PWD=$billday_paypal_getbalance_API_Password&USER=$billday_paypal_getbalance_API_UserName&SIGNATURE=$billday_paypal_getbalance_API_Signature$billday_paypal_getbalance_nvpStr_";
 
 	// setting the nvpreq as POST FIELD to curl
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
+	curl_setopt($billday_paypal_getbalance_ch, CURLOPT_POSTFIELDS, $billday_paypal_getbalance_nvpreq);
 
 	// getting response from server
-	$httpResponse = curl_exec($ch);
+	$billday_paypal_getbalance_httpResponse = curl_exec($billday_paypal_getbalance_ch);
 
-	if(!$httpResponse) {
-		exit("$methodName_ failed: ".curl_error($ch).'('.curl_errno($ch).')');
+	if(!$billday_paypal_getbalance_httpResponse) {
+		exit("$billday_paypal_getbalance_methodName_ failed: ".curl_error($billday_paypal_getbalance_ch).'('.curl_errno($billday_paypal_getbalance_ch).')');
 	}
 
 	// Extract the RefundTransaction response details
-	$httpResponseAr = explode("&", $httpResponse);
+	$billday_paypal_getbalance_httpResponseAr = explode("&", $billday_paypal_getbalance_httpResponse);
 
-	$httpParsedResponseAr = array();
-	foreach ($httpResponseAr as $i => $value) {
-		$tmpAr = explode("=", $value);
-		if(sizeof($tmpAr) > 1) {
-			$httpParsedResponseAr[$tmpAr[0]] = $tmpAr[1];
+	$billday_paypal_getbalance_httpParsedResponseAr = array();
+	foreach ($billday_paypal_getbalance_httpResponseAr as $billday_paypal_getbalance_i => $billday_paypal_getbalance_value) {
+		$billday_paypal_getbalance_tmpAr = explode("=", $billday_paypal_getbalance_value);
+		if(sizeof($billday_paypal_getbalance_tmpAr) > 1) {
+			$billday_paypal_getbalance_httpParsedResponseAr[$billday_paypal_getbalance_tmpAr[0]] = $billday_paypal_getbalance_tmpAr[1];
 		}
 	}
 
-	if((0 == sizeof($httpParsedResponseAr)) || !array_key_exists('ACK', $httpParsedResponseAr)) {
-		exit("Invalid HTTP Response for POST request($nvpreq) to $API_Endpoint.");
+	if((0 == sizeof($billday_paypal_getbalance_httpParsedResponseAr)) || !array_key_exists('ACK', $billday_paypal_getbalance_httpParsedResponseAr)) {
+		exit("Invalid HTTP Response for POST request($billday_paypal_getbalance_nvpreq) to $billday_paypal_getbalance_API_Endpoint.");
 	}
 
-	return $httpParsedResponseAr;
+	return $billday_paypal_getbalance_httpParsedResponseAr;
 }
 
-$nvpStr="";
+$billday_paypal_getbalance_nvpStr="";
 
-$httpParsedResponseAr = PPHttpPost('GetBalance', $nvpStr);
+$billday_paypal_getbalance_httpParsedResponseAr = PPHttpPost('GetBalance', $billday_paypal_getbalance_nvpStr);
 
-if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) {
-	exit('GetBalance Completed Successfully: '.print_r($httpParsedResponseAr, true));
+if("SUCCESS" == strtoupper($billday_paypal_getbalance_httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($billday_paypal_getbalance_httpParsedResponseAr["ACK"])) {
+	exit('GetBalance Completed Successfully: '.print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
 } else  {
-	exit('GetBalance failed: ' . print_r($httpParsedResponseAr, true));
+	exit('GetBalance failed: ' . print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
 }
 
 ?>
