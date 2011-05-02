@@ -1,0 +1,11 @@
+The WordPress PHP plugin code in this project can be used to access and display a PayPal account
+balance in the WordPress administrative interface.
+
+It accompanies a PayPal X Developer Network three part article series on "Integrating Payments
+into WordPress".
+
+For more information, please refer to the articles bundled together here:
+
+
+All source code is licensed under the Simplified BSD License:
+http://www.opensource.org/licenses/bsd-license.php
