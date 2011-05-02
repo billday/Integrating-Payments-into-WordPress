@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: PayPal GetBalance
+Plugin Name: Bill Day's PayPal GetBalance
 Description: Retrieves a PayPal account balance for the currently specified username and password.
 Version: 1.0
 Author: Bill Day
@@ -18,7 +18,7 @@ $billday_paypal_getbalance_environment = 'sandbox';	// or 'beta-sandbox' or 'liv
  * @param	string	The POST Message fields in &name=value pair format
  * @return	array	Parsed HTTP Response body
  */
-function PPHttpPost($billday_paypal_getbalance_methodName_, $billday_paypal_getbalance_nvpStr_) {
+function BillDay_PayPal_GetBalance($billday_paypal_getbalance_methodName_, $billday_paypal_getbalance_nvpStr_) {
 	global $billday_paypal_getbalance_environment;
 
 	$billday_paypal_getbalance_API_UserName = urlencode('my_api_username');
@@ -73,14 +73,48 @@ function PPHttpPost($billday_paypal_getbalance_methodName_, $billday_paypal_getb
 	return $billday_paypal_getbalance_httpParsedResponseAr;
 }
 
-$billday_paypal_getbalance_nvpStr="";
 
-$billday_paypal_getbalance_httpParsedResponseAr = PPHttpPost('GetBalance', $billday_paypal_getbalance_nvpStr);
+/**
+ * Displays the balance retrieved using the BDPPGetBalance function.
+ */
+function BillDay_PayPal_DisplayBalance() {
+	$billday_paypal_getbalance_nvpStr="";
 
-if("SUCCESS" == strtoupper($billday_paypal_getbalance_httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($billday_paypal_getbalance_httpParsedResponseAr["ACK"])) {
-	exit('GetBalance Completed Successfully: '.print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
-} else  {
-	exit('GetBalance failed: ' . print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
+	$billday_paypal_getbalance_httpParsedResponseAr = BillDay_PayPal_GetBalance('GetBalance', $billday_paypal_getbalance_nvpStr);
+
+	if("SUCCESS" == strtoupper($billday_paypal_getbalance_httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($billday_paypal_getbalance_httpParsedResponseAr["ACK"])) {
+		exit('GetBalance Completed Successfully: '.print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
+	} else  {
+		exit('GetBalance failed: ' . print_r($billday_paypal_getbalance_httpParsedResponseAr, true));
+	}
 }
+
+
+/**
+ * Gets and displays the PayPal balance when the admin_footer action is called
+ */
+add_action('admin_footer', 'BillDay_PayPal_DisplayBalance');
+
+
+/**
+ * We use the same CSS to position the balance that Hello Dolly used to show the lyrics.
+ */
+function dolly_css() {
+echo "
+<style type='text/css'>
+#dolly {
+position: absolute;
+top: 2.3em;
+margin: 0;
+padding: 0;
+right: 10px;
+font-size: 16px;
+color: #d54e21;
+}
+</style>
+";
+}
+
+add_action('admin_head', 'dolly_css');
 
 ?>
